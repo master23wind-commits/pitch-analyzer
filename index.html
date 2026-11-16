@@ -410,7 +410,7 @@
     // 항목
     $('items').innerHTML = r.items.map((it) => {
       if (it.score === null) return `<div class="item"><div class="top"><b>${it.name}</b><span class="sc">-</span></div><p class="note">이 영상에서는 측정하지 못했어요.</p></div>`;
-      const fb = it.score >= 70 ? `<div class="fb good">👍 ${it.good}</div>` : `<div class="fb fix">💡 ${it.fix}</div>`;
+      const fb = it.score >= 80 ? `<div class="fb good">👍 ${it.good}</div>` : `<div class="fb fix">💡 ${it.fix}</div>`;
       return `<div class="item"><div class="top"><b>${it.name}<small>비중 ${it.weight}%</small></b><span class="sc" style="color:${color(it.score)}">${it.score}</span></div>
         <div class="bar"><i style="width:${it.score}%;background:${color(it.score)}"></i></div>
         ${it.metrics.map((m) => `<div class="met"><span>${m.label}</span><div><b>${m.value}</b>${m.tip ? `<em>${m.tip}</em>` : ''}</div></div>`).join('')}

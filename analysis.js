@@ -25,7 +25,15 @@
   };
   // SPREAD: 점수 간격 조절. 클수록 학생 간 점수 차이가 완만해짐 (A 기준 영상 2편이 모두 A가 되도록 2.8)
   const SPREAD = 2.8;
-  const band = (v, k) => { const { bad, ref } = STD[k]; const b0 = ref - (ref - bad) * SPREAD; return lin(v, b0, b0 + (ref - b0) / 0.85); };
+  // 초보 배려(2026-11-16): A 기준보다 못한 쪽은 감점을 더 완만하게(SPREAD_LOW), 한 항목 최저 점수 FLOOR
+  // (동작이 서툴러 측정이 크게 빗나가도 한 항목이 0점으로 떨어지지 않게)
+  const SPREAD_LOW = 4, FLOOR = 40;
+  const band = (v, k) => {
+    const { bad, ref } = STD[k];
+    if ((ref - bad) * (v - ref) >= 0) { const b0 = ref - (ref - bad) * SPREAD; return lin(v, b0, b0 + (ref - b0) / 0.85); }
+    const b1 = ref - (ref - bad) * SPREAD_LOW;
+    return Math.max(FLOOR, 85 * (v - b1) / (ref - b1));
+  };
   const refTxt = (k, f) => 'A 기준 ' + (f ? f(STD[k].ref) : STD[k].ref + STD[k].unit);
   const median = (a) => { const s = [...a].sort((x, y) => x - y); return s.length ? s[Math.floor(s.length / 2)] : 0; };
 
